@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /jobs/
+
+# Keep private pages out of indexes
+Disallow: /dashboard/
+Disallow: /accounts/
+Disallow: /apply/
+Disallow: /reviews/
+Disallow: /billing/
+Disallow: /admin/
+
+Sitemap: https://{{ request.get_host }}/sitemap.xml

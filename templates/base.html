@@ -5,7 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{% block meta_description %}Re Jobs — Human-reviewed job applications. Find your next opportunity.{% endblock %}">
-  <title>{% block title %}Re Jobs{% endblock %}</title>
+  <title>{% block title %}Re Jobs{% endblock %} — Re Jobs</title>
+  <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Re Jobs">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Re Jobs — Human-reviewed job applications{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Find your next opportunity. Every application reviewed by a real person.{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  {% block extra_head %}{% endblock %}
   <!-- Apply saved theme before paint to avoid flash -->
   <script>
     (function(){

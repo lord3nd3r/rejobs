@@ -1,6 +1,47 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ job.title }} at {{ job.employer.company_name }}{% endblock %}
+{% block meta_description %}{{ job.title }} at {{ job.employer.company_name }}. {{ job.location }} · {{ job.get_job_type_display }} · {{ job.get_work_mode_display }}. Apply on Re Jobs.{% endblock %}
+{% block og_type %}job_listing{% endblock %}
+{% block og_title %}{{ job.title }} at {{ job.employer.company_name }}{% endblock %}
+{% block og_description %}{{ job.location }} · {{ job.get_job_type_display }} · {{ job.get_work_mode_display }}{% if job.is_salary_public and job.salary_min %} · {{ job.salary_display }}{% endif %}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "JobPosting",
+  "title": "{{ job.title|escapejs }}",
+  "description": "{{ job.description|escapejs }}",
+  "datePosted": "{{ job.posted_at|date:'Y-m-d'|default:job.created_at|date:'Y-m-d' }}",
+  {% if job.expires_at %}"validThrough": "{{ job.expires_at|date:'Y-m-d' }}",{% endif %}
+  "employmentType": "{{ job.get_job_type_display|upper|escapejs }}",
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "{{ job.employer.company_name|escapejs }}"{% if job.employer.website %},
+    "sameAs": "{{ job.employer.website|escapejs }}"{% endif %}
+  },
+  "jobLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "{{ job.location|escapejs }}"
+    }
+  }{% if job.work_mode == 'remote' %},
+  "jobLocationType": "TELECOMMUTE"{% endif %}{% if job.is_salary_public and job.salary_min %},
+  "baseSalary": {
+    "@type": "MonetaryAmount",
+    "currency": "{{ job.salary_currency|default:'USD' }}",
+    "value": {
+      "@type": "QuantitativeValue",
+      "minValue": {{ job.salary_min }},
+      "maxValue": {{ job.salary_max|default:job.salary_min }},
+      "unitText": "YEAR"
+    }
+  }{% endif %}
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container">
