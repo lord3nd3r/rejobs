@@ -1,0 +1,37 @@
+# .gitignore — rejobs
+
+# ─── AI Working Memory (local-only, never commit) ───────────────────────────
+.claude/
+CLAUDE.md
+
+# ─── OS / Editor ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ─── Environment & Secrets ───────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+
+# ─── Django generated ────────────────────────────────────────────────────────
+staticfiles/
+media/
+!media/.gitkeep
+
+# ─── Logs & Temp ─────────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak

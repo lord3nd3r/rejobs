@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Employer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4 fw-bold mb-0">Employer Dashboard</h1>
+    <a href="{% url 'jobs:post' %}" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-lg me-1"></i>Post a Job
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-4">
+      <div class="card border-0 shadow-sm text-center p-3">
+        <div class="display-6 fw-bold text-primary">{{ active_count }}</div>
+        <div class="text-muted small">Active Listings</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card border-0 shadow-sm text-center p-3">
+        <div class="display-6 fw-bold text-success">{{ total_applications }}</div>
+        <div class="text-muted small">Total Applications</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card border-0 shadow-sm text-center p-3">
+        <div class="display-6 fw-bold text-secondary">{{ listings|length }}</div>
+        <div class="text-muted small">Total Listings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listings table -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+      Your Job Listings
+      <a href="{% url 'billing:plans' %}" class="btn btn-outline-secondary btn-sm">Upgrade Plan</a>
+    </div>
+    {% if listings %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-group-divider">
+          <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Applications</th>
+            <th>Posted</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for listing in listings %}
+          <tr>
+            <td>
+              <a class="fw-medium text-decoration-none" href="{% url 'jobs:detail' listing.slug %}">{{ listing.title }}</a>
+            </td>
+            <td class="text-muted small">{{ listing.get_job_type_display }}</td>
+            <td>
+              {% if listing.status == 'active' %}
+              <span class="badge bg-success">Active</span>
+              {% elif listing.status == 'draft' %}
+              <span class="badge bg-secondary">Draft</span>
+              {% elif listing.status == 'paused' %}
+              <span class="badge text-bg-warning">Paused</span>
+              {% elif listing.status == 'closed' %}
+              <span class="badge bg-danger">Closed</span>
+              {% else %}
+              <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ listing.get_status_display }}</span>
+              {% endif %}
+            </td>
+            <td>{{ listing.applications.count }}</td>
+            <td class="text-muted small">{{ listing.posted_at|date:"M j, Y"|default:"—" }}</td>
+            <td>
+              <a href="{% url 'applications:job_applicants' listing.pk %}" class="btn btn-outline-primary btn-sm me-1">Applicants</a>
+              <a href="{% url 'jobs:edit' listing.pk %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="card-body text-center py-5 text-muted">
+      <i class="bi bi-briefcase display-4 d-block mb-3"></i>
+      <p>No job listings yet.</p>
+      <a href="{% url 'jobs:post' %}" class="btn btn-primary btn-sm">Post Your First Job</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

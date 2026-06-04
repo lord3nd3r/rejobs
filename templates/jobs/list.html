@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Jobs{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Search bar -->
+  <div class="row justify-content-center my-4">
+    <div class="col-lg-10">
+      <form method="get" action="{% url 'jobs:list' %}" class="row g-2 align-items-end">
+        <div class="col-md-5">
+          {{ form.q }}
+        </div>
+        <div class="col-md-4">
+          {{ form.location }}
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-search me-1"></i>Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Sidebar filters -->
+    <div class="col-lg-3 mb-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-semibold mb-3">Filter Results</h6>
+          <form method="get" action="{% url 'jobs:list' %}">
+            {{ form.q.as_hidden }}
+            {{ form.location.as_hidden }}
+            <div class="mb-3">
+              <label class="form-label small fw-medium">Job Type</label>
+              {{ form.job_type }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-medium">Work Mode</label>
+              {{ form.work_mode }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-medium">Category</label>
+              <select name="category" class="form-select form-select-sm">
+                <option value="">All categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline-primary btn-sm w-100">Apply Filters</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Job listings -->
+    <div class="col-lg-9">
+      <p class="text-muted small mb-3">{{ total }} job{{ total|pluralize }} found</p>
+
+      {% if featured %}
+      <div class="mb-3">
+        <span class="badge text-bg-warning mb-2">Featured</span>
+        {% for job in featured %}
+        {% include 'jobs/_job_card.html' with job=job featured=True %}
+        {% endfor %}
+        <hr>
+      </div>
+      {% endif %}
+
+      {% for job in page %}
+      {% include 'jobs/_job_card.html' with job=job %}
+      {% empty %}
+      <div class="text-center py-5 text-muted">
+        <i class="bi bi-briefcase display-4 d-block mb-3"></i>
+        <p class="mb-0">No jobs match your search. Try different keywords or filters.</p>
+      </div>
+      {% endfor %}
+
+      {% if page.has_other_pages %}
+      <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+          {% if page.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?{% for k,v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ page.previous_page_number }}">
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          </li>
+          {% endif %}
+          {% for num in page.paginator.page_range %}
+          <li class="page-item {% if page.number == num %}active{% endif %}">
+            <a class="page-link" href="?{% for k,v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+          </li>
+          {% endfor %}
+          {% if page.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?{% for k,v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ page.next_page_number }}">
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

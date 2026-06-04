@@ -1,0 +1,160 @@
+/* ============================================================
+   Re Jobs — Main Stylesheet
+   Clean, professional. No decorative graphics.
+   ============================================================ */
+
+:root {
+  --rj-primary:     #1d4ed8;
+  --rj-primary-dk:  #1e40af;
+  --rj-text:        #1e293b;
+  --rj-muted:       #64748b;
+  --rj-border:      #e2e8f0;
+  --rj-bg:          #f8fafc;
+  --rj-white:       #ffffff;
+}
+
+[data-bs-theme="dark"] {
+  --rj-text:    #e2e8f0;
+  --rj-muted:   #94a3b8;
+  --rj-border:  #334155;
+  --rj-bg:      #0f172a;
+  --rj-white:   #1e293b;
+}
+
+/* Dark mode: override Bootstrap card & shadow variables so cards don't glow white */
+[data-bs-theme="dark"] .card {
+  --bs-card-bg:          #1e293b;
+  --bs-card-cap-bg:      rgba(255, 255, 255, 0.04);
+  --bs-card-border-color: #334155;
+  --bs-box-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-bs-theme="dark"] .list-group-item {
+  --bs-list-group-bg:            #1e293b;
+  --bs-list-group-border-color:  #334155;
+  --bs-list-group-color:         #e2e8f0;
+}
+
+[data-bs-theme="dark"] .table {
+  --bs-table-bg: #1e293b;
+  --bs-table-border-color: #334155;
+}
+
+/* Base */
+body {
+  color: var(--rj-text);
+  background-color: var(--rj-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9375rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 { color: var(--rj-text); }
+.text-muted { color: var(--rj-muted) !important; }
+
+/* Navbar — adapts to both themes */
+.navbar {
+  min-height: 58px;
+}
+.navbar-brand {
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+/* Cards */
+.card {
+  border-radius: 0.5rem;
+}
+.card-header {
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--rj-primary);
+  border-color: var(--rj-primary);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--rj-primary-dk);
+  border-color: var(--rj-primary-dk);
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--rj-primary);
+  box-shadow: 0 0 0 0.2rem rgba(29, 78, 216, 0.15);
+}
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--rj-text);
+}
+
+/* Search bar — job list page */
+.search-bar .form-control {
+  height: 46px;
+  border-radius: 0.4rem;
+}
+.search-bar .btn {
+  height: 46px;
+}
+
+/* Tables */
+.table thead th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--rj-muted);
+}
+
+/* Badges */
+.badge { font-weight: 500; }
+
+/* Dashboard stat cards */
+.stat-card .display-6 {
+  line-height: 1.1;
+}
+
+/* Footer */
+footer {
+  font-size: 0.875rem;
+}
+
+/* Utility: divider with label */
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--rj-muted);
+  font-size: 0.8rem;
+}
+.divider-label::before,
+.divider-label::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--rj-border);
+}
+
+/* Formset rows */
+.formset-row {
+  border: 1px solid var(--rj-border);
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  background: var(--rj-white);
+}
+
+/* Job card hover effect */
+.card:has(a):hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  transition: box-shadow 0.15s ease;
+}
+
+/* Alert tag fixes for Django messages */
+.alert-error { @extend .alert-danger; }

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} at {{ job.employer.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <a href="{% url 'jobs:list' %}" class="text-muted small d-inline-block mb-3">
+        <i class="bi bi-arrow-left me-1"></i>Back to jobs
+      </a>
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h1 class="h3 fw-bold mb-1">{{ job.title }}</h1>
+              <p class="text-muted mb-0">
+                <i class="bi bi-building me-1"></i>
+                <strong>{{ job.employer.company_name }}</strong>
+                {% if job.employer.website %}
+                <a href="{{ job.employer.website }}" target="_blank" rel="noopener noreferrer" class="ms-2 small">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+                {% endif %}
+              </p>
+            </div>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">{{ job.get_status_display }}</span>
+          </div>
+
+          <!-- Meta row -->
+          <div class="row gy-2 mb-4 border-top border-bottom py-3">
+            <div class="col-sm-3">
+              <span class="text-muted small d-block">Job Type</span>
+              <span class="fw-medium">{{ job.get_job_type_display }}</span>
+            </div>
+            <div class="col-sm-3">
+              <span class="text-muted small d-block">Work Mode</span>
+              <span class="fw-medium">{{ job.get_work_mode_display }}</span>
+            </div>
+            <div class="col-sm-3">
+              <span class="text-muted small d-block">Location</span>
+              <span class="fw-medium">{{ job.location|default:"Not specified" }}</span>
+            </div>
+            <div class="col-sm-3">
+              <span class="text-muted small d-block">Salary</span>
+              <span class="fw-medium text-primary">{{ job.salary_display }}</span>
+            </div>
+          </div>
+
+          <!-- Apply CTA -->
+          <div class="mb-4">
+            {% if user.is_authenticated and user.is_job_seeker_user %}
+              {% if already_applied %}
+              <div class="alert alert-info py-2 mb-0">
+                <i class="bi bi-check-circle me-2"></i>You have already applied for this position.
+              </div>
+              {% else %}
+              <a href="{% url 'applications:apply' job.slug %}" class="btn btn-primary">
+                <i class="bi bi-send me-2"></i>Apply Now
+              </a>
+              {% endif %}
+            {% elif not user.is_authenticated %}
+            <a href="{% url 'accounts:login' %}?next={% url 'jobs:detail' job.slug %}" class="btn btn-primary">
+              Sign in to Apply
+            </a>
+            {% endif %}
+            {% if job.application_deadline %}
+            <span class="text-muted small ms-3">
+              <i class="bi bi-calendar me-1"></i>Deadline: {{ job.application_deadline|date:"N j, Y" }}
+            </span>
+            {% endif %}
+          </div>
+
+          <!-- Description -->
+          <h5 class="fw-semibold mb-2">About the Role</h5>
+          <div class="text-secondary mb-4" style="white-space: pre-line">{{ job.description }}</div>
+
+          {% if job.responsibilities %}
+          <h5 class="fw-semibold mb-2">Responsibilities</h5>
+          <div class="text-secondary mb-4" style="white-space: pre-line">{{ job.responsibilities }}</div>
+          {% endif %}
+
+          <h5 class="fw-semibold mb-2">Requirements</h5>
+          <div class="text-secondary mb-4" style="white-space: pre-line">{{ job.requirements }}</div>
+
+          <!-- Company info -->
+          {% if job.employer.company_description %}
+          <div class="border-top pt-3 mt-3">
+            <h5 class="fw-semibold mb-2">About {{ job.employer.company_name }}</h5>
+            <p class="text-muted">{{ job.employer.company_description }}</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

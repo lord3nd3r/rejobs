@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Reviewer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4 fw-bold mb-0">My Review Queue</h1>
+    <span class="text-muted small">{{ pending|length }} pending &middot; {{ in_progress|length }} in progress &middot; {{ completed|length }} completed</span>
+  </div>
+
+  <div class="row g-3">
+    <!-- Pending -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-warning-subtle fw-semibold">
+          Pending <span class="badge text-bg-warning ms-1">{{ pending|length }}</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for a in pending %}
+          <li class="list-group-item">
+            <a class="fw-medium text-decoration-none d-block" href="{% url 'reviews:review' a.pk %}">
+              {{ a.application.applicant.get_full_name }}
+            </a>
+            <span class="text-muted small d-block">{{ a.application.job.title }}</span>
+            <span class="text-muted small d-block">{{ a.application.job.employer.company_name }}</span>
+            {% if a.due_date %}
+            <span class="badge bg-secondary-subtle text-secondary-emphasis mt-1">Due {{ a.due_date|date:"M j, Y" }}</span>
+            {% endif %}
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small py-3 text-center">No pending reviews</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- In Progress -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-info-subtle fw-semibold">
+          In Progress <span class="badge text-bg-info ms-1">{{ in_progress|length }}</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for a in in_progress %}
+          <li class="list-group-item">
+            <a class="fw-medium text-decoration-none d-block" href="{% url 'reviews:review' a.pk %}">
+              {{ a.application.applicant.get_full_name }}
+            </a>
+            <span class="text-muted small d-block">{{ a.application.job.title }}</span>
+            <span class="text-muted small d-block">{{ a.application.job.employer.company_name }}</span>
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small py-3 text-center">None in progress</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Completed -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-success-subtle fw-semibold">
+          Completed <span class="badge bg-success ms-1">{{ completed|length }}</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for a in completed %}
+          <li class="list-group-item">
+            <span class="fw-medium d-block">{{ a.application.applicant.get_full_name }}</span>
+            <span class="text-muted small d-block">{{ a.application.job.title }}</span>
+            <span class="badge bg-secondary-subtle text-secondary-emphasis mt-1">{{ a.completed_at|date:"M j, Y" }}</span>
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small py-3 text-center">No completed reviews</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

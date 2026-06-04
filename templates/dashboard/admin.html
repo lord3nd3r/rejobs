@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="h4 fw-bold mb-4">Admin Dashboard</h1>
+
+  <!-- Stats row -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-primary">{{ total_users }}</div>
+        <div class="text-muted small">Total Users</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-success">{{ total_employers }}</div>
+        <div class="text-muted small">Employers</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-info">{{ total_job_seekers }}</div>
+        <div class="text-muted small">Job Seekers</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-secondary">{{ total_reviewers }}</div>
+        <div class="text-muted small">Reviewers</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-warning">{{ pending_reviews }}</div>
+        <div class="text-muted small">Pending Reviews</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-body">{{ total_applications }}</div>
+        <div class="text-muted small">Applications</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Unassigned applications -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+          Unassigned Applications
+          <span class="badge bg-danger">{{ unassigned_applications|length }}</span>
+        </div>
+        {% if unassigned_applications %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-group-divider">
+              <tr>
+                <th>Applicant</th>
+                <th>Position</th>
+                <th>Company</th>
+                <th>Applied</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in unassigned_applications %}
+              <tr>
+                <td class="fw-medium">{{ app.applicant.get_full_name }}</td>
+                <td>
+                  <a href="{% url 'jobs:detail' app.job.slug %}" class="text-decoration-none">{{ app.job.title }}</a>
+                </td>
+                <td class="text-muted small">{{ app.job.employer.company_name }}</td>
+                <td class="text-muted small">{{ app.applied_at|date:"M j, Y" }}</td>
+                <td>
+                  <a href="{% url 'reviews:assign' app.pk %}" class="btn btn-primary btn-sm">
+                    Assign
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="card-body text-center py-4 text-muted">
+          <i class="bi bi-check2-circle display-5 d-block mb-2 text-success"></i>
+          All applications have been assigned.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="col-lg-4">
+
+      <!-- Quick actions -->
+      <div class="card border-0 shadow-sm mb-3">
+        <div class="card-header fw-semibold">Quick Actions</div>
+        <div class="card-body d-grid gap-2">
+          <a href="/admin/" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-gear me-2"></i>Django Admin
+          </a>
+          <a href="{% url 'reviews:dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-clipboard-check me-2"></i>Full Review Queue
+          </a>
+          <a href="{% url 'jobs:list' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-list-ul me-2"></i>All Job Listings
+          </a>
+          <a href="/admin/accounts/customuser/add/" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-person-plus me-2"></i>Add Reviewer
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent assignments -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header fw-semibold">Recent Assignments</div>
+        <ul class="list-group list-group-flush">
+          {% for ra in recent_assignments %}
+          <li class="list-group-item px-3 py-2">
+            <div class="fw-medium small">{{ ra.application.applicant.get_full_name }}</div>
+            <div class="text-muted small">{{ ra.application.job.title }}</div>
+            <div class="d-flex justify-content-between align-items-center mt-1">
+              <span class="text-muted small">{{ ra.reviewer.get_full_name }}</span>
+              {% if ra.status == 'pending' %}<span class="badge text-bg-warning">Pending</span>
+              {% elif ra.status == 'in_progress' %}<span class="badge text-bg-info">In Progress</span>
+              {% else %}<span class="badge bg-success">Done</span>{% endif %}
+            </div>
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small py-3 text-center">No assignments yet</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

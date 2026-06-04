@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Pricing — Re Jobs{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="text-center my-5">
+    <h1 class="h3 fw-bold">Simple, Transparent Pricing</h1>
+    <p class="text-muted">All plans include human review of every application. No AI screening.</p>
+  </div>
+
+  <div class="row justify-content-center g-4">
+    {% for plan in plans %}
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 {% if plan.tier == 'professional' %}border border-primary border-2{% endif %}">
+        {% if plan.tier == 'professional' %}
+        <div class="card-header bg-primary text-white text-center py-2 fw-semibold">Most Popular</div>
+        {% endif %}
+        <div class="card-body p-4">
+          <h5 class="fw-bold">{{ plan.name }}</h5>
+          <div class="display-6 fw-bold mb-1">
+            {% if plan.price_monthly == 0 %}Free{% else %}${{ plan.price_monthly|floatformat:0 }}<span class="fs-6 text-muted fw-normal">/mo</span>{% endif %}
+          </div>
+          {% if plan.description %}<p class="text-muted small">{{ plan.description }}</p>{% endif %}
+          <ul class="list-unstyled mb-4 mt-3">
+            <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>{{ plan.max_active_listings }} active listing{{ plan.max_active_listings|pluralize }}</li>
+            <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>
+              {% if plan.featured_listings_per_month > 0 %}{{ plan.featured_listings_per_month }} featured slot{{ plan.featured_listings_per_month|pluralize }}/mo{% else %}Standard listing only{% endif %}
+            </li>
+            <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>Human-reviewed applications</li>
+          </ul>
+          {% if current_sub and current_sub.plan == plan %}
+          <div class="btn btn-success w-100 disabled">Current Plan</div>
+          {% else %}
+          <a href="{% url 'billing:checkout' plan.tier %}" class="btn {% if plan.tier == 'professional' %}btn-primary{% else %}btn-outline-primary{% endif %} w-100">
+            {% if plan.price_monthly == 0 %}Get Started Free{% else %}Subscribe{% endif %}
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted text-center">Plans coming soon.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

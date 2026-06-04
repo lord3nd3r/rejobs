@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Review Queue{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="h4 fw-bold mb-4">My Review Queue</h1>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-warning-subtle fw-semibold">
+          Pending <span class="badge text-bg-warning ms-1">{{ pending|length }}</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for a in pending %}
+          <li class="list-group-item">
+            <a class="fw-medium text-decoration-none" href="{% url 'reviews:review' a.pk %}">
+              {{ a.application.applicant.get_full_name }}
+            </a>
+            <span class="d-block text-muted small">{{ a.application.job.title }}</span>
+            {% if a.due_date %}<span class="badge bg-secondary-subtle text-secondary-emphasis small">Due {{ a.due_date|date:"M j" }}</span>{% endif %}
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small">No pending reviews</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-info-subtle fw-semibold">
+          In Progress <span class="badge text-bg-info ms-1">{{ in_progress|length }}</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for a in in_progress %}
+          <li class="list-group-item">
+            <a class="fw-medium text-decoration-none" href="{% url 'reviews:review' a.pk %}">
+              {{ a.application.applicant.get_full_name }}
+            </a>
+            <span class="d-block text-muted small">{{ a.application.job.title }}</span>
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small">None in progress</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-success-subtle fw-semibold">
+          Completed <span class="badge bg-success ms-1">{{ completed|length }}</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for a in completed %}
+          <li class="list-group-item">
+            <span class="fw-medium">{{ a.application.applicant.get_full_name }}</span>
+            <span class="d-block text-muted small">{{ a.application.job.title }}</span>
+            <span class="badge bg-secondary-subtle text-secondary-emphasis small">{{ a.completed_at|date:"M j, Y" }}</span>
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted small">No completed reviews</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

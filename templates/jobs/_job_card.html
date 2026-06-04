@@ -1,0 +1,26 @@
+<div class="card border-0 shadow-sm mb-3 {% if featured %}border-start border-warning border-3{% endif %}">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h5 class="mb-1">
+          <a class="text-decoration-none text-body fw-semibold" href="{% url 'jobs:detail' job.slug %}">{{ job.title }}</a>
+        </h5>
+        <p class="text-muted mb-2 small">
+          <i class="bi bi-building me-1"></i>{{ job.employer.company_name }}
+          {% if job.location %}
+          <span class="mx-2">·</span><i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+          {% endif %}
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ job.get_job_type_display }}</span>
+          <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ job.get_work_mode_display }}</span>
+          {% if job.category %}<span class="badge bg-secondary-subtle text-secondary-emphasis">{{ job.category.name }}</span>{% endif %}
+        </div>
+      </div>
+      <div class="text-end ms-3 flex-shrink-0">
+        <p class="small fw-medium mb-1 text-primary">{{ job.salary_display }}</p>
+        <p class="text-muted small mb-0">{{ job.posted_at|timesince }} ago</p>
+      </div>
+    </div>
+  </div>
+</div>

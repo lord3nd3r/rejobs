@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Assign Reviewer{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <h1 class="h4 fw-bold mb-4">Assign Reviewer</h1>
+      <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+          <p class="mb-1 fw-medium">{{ application.job.title }}</p>
+          <p class="text-muted small mb-0">Applicant: {{ application.applicant.get_full_name }}</p>
+        </div>
+      </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label fw-medium">Select Reviewer</label>
+              <select name="reviewer_id" class="form-select" required>
+                <option value="">— Choose a reviewer —</option>
+                {% for reviewer in reviewers %}
+                <option value="{{ reviewer.pk }}">{{ reviewer.get_full_name }} ({{ reviewer.email }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-medium">Due Date <span class="text-muted fw-normal">(optional)</span></label>
+              <input type="date" name="due_date" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Assign</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
