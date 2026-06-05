@@ -430,3 +430,71 @@ footer {
   .table-responsive {
     max-width: 100%;
     overflow-x: hidden;
+  }
+
+  /* ============================================================
+     Native app list polish (iOS/Android style)
+     - .job-results scoped so only the browse listings become full-bleed
+       separator rows (not dashboard stat cards or review panels)
+     - Dramatic visual shift from "web cards" to tappable list cells
+     - Keeps left accent rail + chevrons (added in _job_card) for scannability
+     ============================================================ */
+  .job-results .card {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-bottom: 1px solid var(--rj-border) !important;
+    margin-bottom: 0 !important;
+    background: var(--rj-white);
+    /* subtle left accent bar like selected / category rail in native lists */
+    border-left: 4px solid var(--rj-primary) !important;
+  }
+  [data-bs-theme="dark"] .job-results .card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+  }
+  .job-results .card:last-child {
+    border-bottom: none;
+  }
+  .job-results .card-body {
+    padding: 0.75rem 0.875rem !important;
+  }
+
+  /* Standalone / installed PWA mode (the key to "looks like an android/ios app"):
+     When user does "Add to Home Screen" and launches from icon, browser chrome
+     (URL bar, back/forward) is hidden; our bottom nav + content = the entire UI.
+     This + the list cells + bottom tabs = professional app shell. */
+  @media (display-mode: standalone) {
+    main {
+      padding-top: 0.25rem !important;
+    }
+    .navbar {
+      box-shadow: none;
+      border-bottom-color: var(--rj-border);
+    }
+    .app-bottom-nav {
+      box-shadow: 0 -1px 0 var(--rj-border);
+    }
+  }
+
+  /* iOS/Android tab bar active indicator polish (subtle top bar on active) */
+  .app-bottom-nav a.active {
+    position: relative;
+  }
+  .app-bottom-nav a.active::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 2.5px;
+    background: var(--rj-primary);
+    border-radius: 2px;
+  }
+  [data-bs-theme="dark"] .app-bottom-nav a.active::after {
+    background: #60a5fa;
+  }
+}
+
+/* Mobile app redesign + PWA additions end. (media query closed here) */

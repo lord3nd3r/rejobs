@@ -26,7 +26,7 @@
 
   <div class="row">
     <!-- Sidebar filters (collapsible on mobile) -->
-    <div class="col-12 col-lg-3 mb-4">
+    <div class="col-12 col-md-3 mb-4">
       <button class="btn btn-outline-primary d-md-none w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#jobFilters" aria-expanded="false" aria-controls="jobFilters">
         <i class="bi bi-funnel me-1"></i> Filters
       </button>
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Job listings -->
-    <div class="col-12 col-lg-9">
+    <div class="col-12 col-md-9 job-results">
       <p class="text-muted small mb-3">{{ total }} job{{ total|pluralize }} found</p>
 
       {% if featured %}

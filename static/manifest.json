@@ -1,0 +1,11 @@
+{
+  "name": "Re Jobs",
+  "short_name": "ReJobs",
+  "description": "Human-reviewed job applications. Browse, apply, and get real reviews from staff — no AI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1d4ed8",
+  "orientation": "any",
+  "icons": []
+}
