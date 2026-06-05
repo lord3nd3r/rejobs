@@ -51,7 +51,7 @@
     <!-- Unassigned applications -->
     <div class="col-lg-8">
       <div class="card border-0 shadow-sm">
-        <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+        <div class="card-header fw-semibold d-flex flex-wrap justify-content-between align-items-center gap-2">
           Unassigned Applications
           <span class="badge bg-danger">{{ unassigned_applications|length }}</span>
         </div>
@@ -125,7 +125,7 @@
           <li class="list-group-item px-3 py-2">
             <div class="fw-medium small">{{ ra.application.applicant.get_full_name }}</div>
             <div class="text-muted small">{{ ra.application.job.title }}</div>
-            <div class="d-flex justify-content-between align-items-center mt-1">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-1 mt-1">
               <span class="text-muted small">{{ ra.reviewer.get_full_name }}</span>
               {% if ra.status == 'pending' %}<span class="badge text-bg-warning">Pending</span>
               {% elif ra.status == 'in_progress' %}<span class="badge text-bg-info">In Progress</span>

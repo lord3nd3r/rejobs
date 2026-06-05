@@ -89,7 +89,7 @@
         <ul class="list-group list-group-flush">
           {% for note in notes %}
           <li class="list-group-item">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex flex-wrap justify-content-between gap-1">
               <span class="badge
                 {% if note.recommendation == 'recommend' %}bg-success
                 {% elif note.recommendation == 'reject' %}bg-danger

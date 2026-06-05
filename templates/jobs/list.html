@@ -7,15 +7,15 @@
 <div class="container">
   <!-- Search bar -->
   <div class="row justify-content-center my-4">
-    <div class="col-lg-10">
-      <form method="get" action="{% url 'jobs:list' %}" class="row g-2 align-items-end">
-        <div class="col-md-5">
+    <div class="col-12 col-lg-10">
+      <form method="get" action="{% url 'jobs:list' %}" class="row g-2 align-items-end search-bar">
+        <div class="col-12 col-md-5">
           {{ form.q }}
         </div>
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
           {{ form.location }}
         </div>
-        <div class="col-md-3">
+        <div class="col-12 col-md-3">
           <button type="submit" class="btn btn-primary w-100">
             <i class="bi bi-search me-1"></i>Search
           </button>
@@ -25,39 +25,44 @@
   </div>
 
   <div class="row">
-    <!-- Sidebar filters -->
-    <div class="col-lg-3 mb-4">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="fw-semibold mb-3">Filter Results</h6>
-          <form method="get" action="{% url 'jobs:list' %}">
-            {{ form.q.as_hidden }}
-            {{ form.location.as_hidden }}
-            <div class="mb-3">
-              <label class="form-label small fw-medium">Job Type</label>
-              {{ form.job_type }}
-            </div>
-            <div class="mb-3">
-              <label class="form-label small fw-medium">Work Mode</label>
-              {{ form.work_mode }}
-            </div>
-            <div class="mb-3">
-              <label class="form-label small fw-medium">Category</label>
-              <select name="category" class="form-select form-select-sm">
-                <option value="">All categories</option>
-                {% for cat in categories %}
-                <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <button type="submit" class="btn btn-outline-primary btn-sm w-100">Apply Filters</button>
-          </form>
+    <!-- Sidebar filters (collapsible on mobile) -->
+    <div class="col-12 col-lg-3 mb-4">
+      <button class="btn btn-sm btn-outline-secondary d-lg-none w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#jobFilters" aria-expanded="false" aria-controls="jobFilters">
+        <i class="bi bi-funnel me-1"></i> Show Filters
+      </button>
+      <div class="collapse d-lg-block" id="jobFilters">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h6 class="fw-semibold mb-3">Filter Results</h6>
+            <form method="get" action="{% url 'jobs:list' %}">
+              {{ form.q.as_hidden }}
+              {{ form.location.as_hidden }}
+              <div class="mb-3">
+                <label class="form-label small fw-medium">Job Type</label>
+                {{ form.job_type }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-medium">Work Mode</label>
+                {{ form.work_mode }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-medium">Category</label>
+                <select name="category" class="form-select form-select-sm">
+                  <option value="">All categories</option>
+                  {% for cat in categories %}
+                  <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="submit" class="btn btn-outline-primary btn-sm w-100">Apply Filters</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Job listings -->
-    <div class="col-lg-9">
+    <div class="col-12 col-lg-9">
       <p class="text-muted small mb-3">{{ total }} job{{ total|pluralize }} found</p>
 
       {% if featured %}

@@ -11,7 +11,7 @@
 
   <div class="row justify-content-center g-4">
     {% for plan in plans %}
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
       <div class="card border-0 shadow-sm h-100 {% if plan.tier == 'professional' %}border border-primary border-2{% endif %}">
         {% if plan.tier == 'professional' %}
         <div class="card-header bg-primary text-white text-center py-2 fw-semibold">Most Popular</div>

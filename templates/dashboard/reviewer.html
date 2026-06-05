@@ -5,9 +5,9 @@
 {% block content %}
 <div class="container">
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center mb-4">
     <h1 class="h4 fw-bold mb-0">My Review Queue</h1>
-    <span class="text-muted small">{{ pending|length }} pending &middot; {{ in_progress|length }} in progress &middot; {{ completed|length }} completed</span>
+    <span class="text-muted small mt-1 mt-sm-0">{{ pending|length }} pending &middot; {{ in_progress|length }} in progress &middot; {{ completed|length }} completed</span>
   </div>
 
   <div class="row g-3">
