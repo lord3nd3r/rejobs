@@ -1,0 +1,51 @@
+{% comment %}
+Mobile-only bottom tab navigation for app-like experience on phones.
+Role-aware links. Hidden on lg+ (desktop uses top navbar + sidebar).
+Active state based on path (simple, no extra logic).
+Uses CSS vars for theme. Touch-friendly 48px+ targets.
+Safe-area-inset for notched devices.
+{% endcomment %}
+<nav class="app-bottom-nav d-lg-none" aria-label="Primary navigation">
+  <a href="{% url 'jobs:list' %}" class="{% if '/jobs' in request.path %}active{% endif %}">
+    <i class="bi bi-briefcase-fill"></i>
+    <span>Browse</span>
+  </a>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'dashboard:home' %}" class="{% if '/dashboard' in request.path or request.path == '/' %}active{% endif %}">
+      <i class="bi bi-speedometer2"></i>
+      <span>Dashboard</span>
+    </a>
+
+    {% if user.is_employer_user %}
+      <a href="{% url 'jobs:post' %}" class="{% if '/jobs/post' in request.path %}active{% endif %}">
+        <i class="bi bi-plus-circle"></i>
+        <span>Post</span>
+      </a>
+    {% elif user.is_jobseeker_user %}
+      <a href="{% url 'applications:my_applications' %}" class="{% if '/applications' in request.path %}active{% endif %}">
+        <i class="bi bi-file-earmark-text"></i>
+        <span>Apps</span>
+      </a>
+    {% elif user.is_reviewer_user or user.is_admin_user %}
+      <a href="{% url 'reviews:dashboard' %}" class="{% if '/reviews' in request.path %}active{% endif %}">
+        <i class="bi bi-clipboard-check"></i>
+        <span>Queue</span>
+      </a>
+    {% endif %}
+
+    <a href="{% url 'accounts:profile' %}" class="{% if '/accounts/profile' in request.path %}active{% endif %}">
+      <i class="bi bi-person-circle"></i>
+      <span>Me</span>
+    </a>
+  {% else %}
+    <a href="{% url 'accounts:login' %}" class="{% if '/login' in request.path %}active{% endif %}">
+      <i class="bi bi-box-arrow-in-right"></i>
+      <span>Sign In</span>
+    </a>
+    <a href="{% url 'accounts:register' %}" class="{% if '/register' in request.path %}active{% endif %}">
+      <i class="bi bi-person-plus"></i>
+      <span>Join</span>
+    </a>
+  {% endif %}
+</nav>
