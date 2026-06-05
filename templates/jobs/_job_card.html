@@ -1,25 +1,36 @@
 <div class="card border-0 shadow-sm mb-3 {% if featured %}border-start border-warning border-3{% endif %}">
   <div class="card-body">
-    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-start">
-      <div>
+    <!-- iOS-native list row avatar (only visible on mobile via d-md-none + .job-results styles) -->
+    <div class="company-avatar d-md-none" aria-hidden="true" style="background: linear-gradient(135deg, #007aff, #5856d6);">
+      {{ job.employer.company_name|slice:":1"|upper }}
+    </div>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-start job-card-content">
+      <div class="job-main-info">
         <h5 class="mb-1">
           <a class="text-decoration-none text-body fw-semibold" href="{% url 'jobs:detail' job.slug %}">{{ job.title }}</a>
         </h5>
-        <p class="text-muted mb-2 small">
+        <p class="text-muted mb-2 small job-company-line">
           <i class="bi bi-building me-1"></i>{{ job.employer.company_name }}
           {% if job.location %}
           <span class="mx-2">·</span><i class="bi bi-geo-alt me-1"></i>{{ job.location }}
           {% endif %}
         </p>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex flex-wrap gap-2 job-badges">
           <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ job.get_job_type_display }}</span>
           <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ job.get_work_mode_display }}</span>
           {% if job.category %}<span class="badge bg-secondary-subtle text-secondary-emphasis">{{ job.category.name }}</span>{% endif %}
         </div>
+
+        <!-- Mobile-only salary in the meta line (iOS list style). Desktop version stays in the right column. -->
+        <div class="d-md-none mt-1">
+          <span class="salary-ios fw-semibold">{{ job.salary_display }}</span>
+        </div>
       </div>
-      <div class="text-sm-end ms-sm-3 flex-shrink-0 mt-2 mt-sm-0">
-        <p class="small fw-medium mb-1 text-primary">{{ job.salary_display }}</p>
-        <p class="text-muted small mb-0">{{ job.posted_at|timesince }} ago</p>
+
+      <div class="text-sm-end ms-sm-3 flex-shrink-0 mt-2 mt-sm-0 job-right-col">
+        <p class="small fw-medium mb-1 text-primary d-none d-md-block">{{ job.salary_display }}</p>
+        <p class="text-muted small mb-0 d-none d-md-block">{{ job.posted_at|timesince }} ago</p>
         <span class="d-md-none d-inline-block mt-1"><i class="bi bi-chevron-right"></i></span>
       </div>
     </div>

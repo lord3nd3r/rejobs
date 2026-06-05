@@ -433,68 +433,302 @@ footer {
   }
 
   /* ============================================================
-     Native app list polish (iOS/Android style)
-     - .job-results scoped so only the browse listings become full-bleed
-       separator rows (not dashboard stat cards or review panels)
-     - Dramatic visual shift from "web cards" to tappable list cells
-     - Keeps left accent rail + chevrons (added in _job_card) for scannability
+     iOS Native App UI v3 (idea #1 — user selected)
+     Complete from-scratch mobile jobs browse look to feel like a native iOS app:
+     - Large SF Pro-style "Jobs" title + subtitle
+     - iOS search island (single prominent bar on mobile, icon action)
+     - .ios-job-list rounded container (white/ dark, subtle shadow, clips rows)
+     - Flat list rows (min 72px, avatar left, title/company/meta, green salary, chevron)
+     - Company avatar: 44px rounded-10 gradient + white initial (no images needed)
+     - Salary emphasized in iOS system green (#34c759)
+     - Bottom tab bar: blur backdrop, iOS blue active (#007aff), safe-area, indicator
+     - Standalone PWA: minimal top chrome so content + bottom nav = the app
+     - All other mobile polish (46-48px targets, forms, compact nav) preserved
+     - Dark mode fully supported
+     - Scoped to .job-results + new .ios-* so dashboards/reviews unaffected
      ============================================================ */
+
+  /* iOS app header (the "Jobs" large title like native apps / the mock) */
+  .ios-app-header {
+    padding: 0.125rem 0.125rem 0.25rem;
+  }
+  .ios-title {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.65px;
+    line-height: 1.0;
+    margin: 0 0 0.125rem 0 !important;
+    color: var(--rj-text);
+  }
+  .ios-subtitle {
+    font-size: 0.85rem;
+    opacity: 0.65;
+    margin-bottom: 0.25rem;
+  }
+
+  /* iOS search bar island — light rounded prominent field (like Settings / App Store search) */
+  form.search-bar {
+    background: #f2f3f5 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    margin-bottom: 0.5rem !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  [data-bs-theme="dark"] form.search-bar {
+    background: #1f2937 !important;
+  }
+  form.search-bar .col-10,
+  form.search-bar .col-2 {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  form.search-bar .form-control,
+  form.search-bar input {
+    height: 44px !important;
+    border-radius: 8px !important;
+    font-size: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background: var(--rj-white) !important;
+    border: 1px solid #e5e7eb !important;
+  }
+  [data-bs-theme="dark"] form.search-bar .form-control,
+  [data-bs-theme="dark"] form.search-bar input {
+    background: #111827 !important;
+    border-color: #374151 !important;
+    color: var(--rj-text);
+  }
+  form.search-bar .btn-primary {
+    height: 44px !important;
+    border-radius: 8px !important;
+    font-weight: 600;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* The iOS-style rounded list container (the key visual for "native list") */
+  .ios-job-list {
+    background: var(--rj-white);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  [data-bs-theme="dark"] .ios-job-list {
+    background: #1e293b;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  }
+  .ios-job-list .ios-count {
+    padding: 10px 14px 2px 14px;
+    margin-bottom: 0 !important;
+    font-size: 0.76rem;
+    color: var(--rj-muted);
+  }
+
+  /* Featured block inside the list */
+  .ios-job-list .badge.text-bg-warning {
+    margin-left: 14px;
+  }
+
+  /* iOS list rows — flat, large tap targets, avatar + row layout, no heavy borders */
   .job-results .card {
+    border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    border: none !important;
-    border-bottom: 1px solid var(--rj-border) !important;
     margin-bottom: 0 !important;
-    background: var(--rj-white);
-    /* subtle left accent bar like selected / category rail in native lists */
-    border-left: 4px solid var(--rj-primary) !important;
+    background: transparent !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    border-left: none !important;
   }
   [data-bs-theme="dark"] .job-results .card {
-    background: #1e293b !important;
-    border-color: #334155 !important;
+    background: transparent !important;
+    border-bottom-color: #334155 !important;
   }
-  .job-results .card:last-child {
-    border-bottom: none;
+  .job-results .card:last-child,
+  .job-results .card:last-of-type {
+    border-bottom: none !important;
   }
+
   .job-results .card-body {
-    padding: 0.75rem 0.875rem !important;
+    padding: 10px 14px !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  /* Standalone / installed PWA mode (the key to "looks like an android/ios app"):
-     When user does "Add to Home Screen" and launches from icon, browser chrome
-     (URL bar, back/forward) is hidden; our bottom nav + content = the entire UI.
-     This + the list cells + bottom tabs = professional app shell. */
-  @media (display-mode: standalone) {
-    main {
-      padding-top: 0.25rem !important;
-    }
-    .navbar {
-      box-shadow: none;
-      border-bottom-color: var(--rj-border);
-    }
-    .app-bottom-nav {
-      box-shadow: 0 -1px 0 var(--rj-border);
-    }
+  /* 44px rounded square avatar with gradient + initial (exactly like the mock) */
+  .company-avatar {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+    background: linear-gradient(135deg, #007aff, #5856d6);
   }
 
-  /* iOS/Android tab bar active indicator polish (subtle top bar on active) */
+  /* Flex row content */
+  .job-results .job-card-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .job-results .job-main-info {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .job-results .job-company-line {
+    font-size: 0.82rem;
+    margin-bottom: 2px !important;
+    color: var(--rj-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .job-results h5,
+  .job-results h5 a {
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 1px !important;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .job-results .job-badges .badge {
+    font-size: 0.66rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+  }
+
+  /* iOS green salary (prominent in meta) */
+  .salary-ios {
+    color: #34c759;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  [data-bs-theme="dark"] .salary-ios {
+    color: #30d158;
+  }
+
+  /* Chevron on right */
+  .job-results .job-right-col {
+    color: #c7c7cc;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+  }
+  [data-bs-theme="dark"] .job-results .job-right-col {
+    color: #6b7280;
+  }
+
+  /* Hide old desktop salary/time in the list rows (mobile only) */
+  .job-results .job-right-col .d-none.d-md-block {
+    display: none !important;
+  }
+
+  /* Small hr inside the ios list */
+  .ios-job-list hr {
+    margin: 2px 14px;
+    border-color: #f0f0f0;
+  }
+  [data-bs-theme="dark"] .ios-job-list hr {
+    border-color: #334155;
+  }
+
+  /* Empty state inside list */
+  .ios-job-list .text-center.py-5 {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  /* iOS blur bottom tab bar (stronger native feel) */
+  .app-bottom-nav {
+    background: rgba(255, 255, 255, 0.92) !important;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    height: 58px;
+    font-size: 0.65rem;
+    font-weight: 500;
+  }
+  [data-bs-theme="dark"] .app-bottom-nav {
+    background: rgba(30, 41, 59, 0.92) !important;
+    border-top-color: rgba(255, 255, 255, 0.08);
+  }
+  .app-bottom-nav a {
+    min-height: 48px;
+  }
+  .app-bottom-nav a.active {
+    color: #007aff; /* iOS blue for the native app pick */
+    font-weight: 600;
+    background: transparent;
+  }
+  [data-bs-theme="dark"] .app-bottom-nav a.active {
+    color: #0a84ff;
+  }
+  .app-bottom-nav a i {
+    font-size: 1.2rem;
+  }
+
+  /* iOS-style active tab indicator line */
   .app-bottom-nav a.active {
     position: relative;
   }
   .app-bottom-nav a.active::after {
     content: "";
     position: absolute;
-    top: 3px;
+    top: 4px;
     left: 50%;
     transform: translateX(-50%);
-    width: 18px;
+    width: 16px;
     height: 2.5px;
-    background: var(--rj-primary);
+    background: #007aff;
     border-radius: 2px;
   }
   [data-bs-theme="dark"] .app-bottom-nav a.active::after {
-    background: #60a5fa;
+    background: #0a84ff;
+  }
+
+  /* Standalone / PWA installed mode — make it feel like the full app (no browser UI) */
+  @media (display-mode: standalone) {
+    .navbar {
+      min-height: 36px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      box-shadow: none;
+      border-bottom-color: var(--rj-border);
+    }
+    .navbar-brand {
+      font-size: 0.95rem;
+    }
+    main {
+      padding-top: 0.25rem !important;
+      padding-bottom: 60px !important;
+    }
+    .ios-app-header {
+      padding-top: 0.35rem;
+    }
+  }
+
+  /* Tighter general mobile type inside the jobs list area */
+  .job-results .text-muted.small {
+    font-size: 0.78rem;
   }
 }
 
-/* Mobile app redesign + PWA additions end. (media query closed here) */
+/* iOS Native App UI v3 + PWA (idea #1) end */
