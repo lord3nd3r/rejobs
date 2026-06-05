@@ -5,7 +5,7 @@ Active state based on path (simple, no extra logic).
 Uses CSS vars for theme. Touch-friendly 48px+ targets.
 Safe-area-inset for notched devices.
 {% endcomment %}
-<nav class="app-bottom-nav d-lg-none" aria-label="Primary navigation">
+<nav class="app-bottom-nav d-md-none" aria-label="Primary navigation">
   <a href="{% url 'jobs:list' %}" class="{% if '/jobs' in request.path %}active{% endif %}">
     <i class="bi bi-briefcase-fill"></i>
     <span>Browse</span>

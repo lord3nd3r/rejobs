@@ -160,175 +160,233 @@ footer {
 .alert-error { @extend .alert-danger; }
 
 /* ============================================================
-   Mobile App-like Professional Styles (max-width 576px)
-   - Makes site feel like a clean native app on phones
-   - Larger touch targets (min 44-48px)
-   - Tighter spacing, better form contrast (esp. dark mode)
-   - Fixed bottom tab nav (see _bottom_nav.html)
-   - Safe area support for modern phones
-   - No fancy graphics/animations; uses existing CSS vars + Bootstrap
+   Mobile Professional App Redesign v2 (from scratch)
+   - Target <=767.98px (phones + small tablets); pairs with d-md-* in templates
+   - Clean native-app aesthetic: prominent search "island", list cells w/ accent rail
+   - 46-48px touch targets (WCAG), safe-area, iOS/Android bottom tabs
+   - Stronger visual delta vs desktop: denser, rounded, primary accents, dark polished
+   - No fancy graphics/animations per spec; Bootstrap 5 + our CSS vars + !important overrides
+   - "Professional app" not "website squeezed": scannable job rows, app-bar search, tab nav
    ============================================================ */
-@media (max-width: 576px) {
-  /* App shell spacing: tighter than desktop, room for bottom nav */
+@media (max-width: 767.98px) {
+  /* App shell */
   body {
-    font-size: 0.95rem;
+    font-size: 0.96rem;
+    background: var(--rj-bg);
   }
   .container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
   }
   main {
-    padding-top: 0.75rem !important;
-    padding-bottom: 64px !important; /* clear fixed bottom nav + safe area */
+    padding-top: 0.5rem !important;
+    padding-bottom: 72px !important; /* room for fixed bottom tab nav + safe area */
   }
 
-  /* Navbar more compact on mobile */
+  /* Compact app-bar style navbar */
   .navbar {
-    min-height: 52px;
+    min-height: 48px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
   }
   .navbar-brand {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .navbar-toggler {
+    padding: 0.25rem 0.5rem;
   }
 
-  /* Search inputs: better app-like appearance, strong contrast in both themes */
-  .search-bar input,
-  .search-bar .form-control {
-    height: 44px;
+  /* Prominent search header (app "search island") */
+  form.search-bar {
+    background: var(--rj-white);
     border: 1px solid var(--rj-border);
-    background-color: var(--rj-white);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  [data-bs-theme="dark"] form.search-bar {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  form.search-bar .col-12 {
+    margin-bottom: 0.25rem;
+  }
+  form.search-bar .form-control,
+  form.search-bar input {
+    height: 48px !important;
     border-radius: 0.5rem;
-    font-size: 0.95rem;
-    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    border-color: var(--rj-border);
+    background: var(--rj-white);
   }
-  .search-bar input:focus,
-  .search-bar .form-control:focus {
-    border-color: var(--rj-primary);
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
-    background-color: var(--rj-white);
-  }
-  [data-bs-theme="dark"] .search-bar input,
-  [data-bs-theme="dark"] .search-bar .form-control {
-    background-color: #1e293b;
+  [data-bs-theme="dark"] form.search-bar .form-control,
+  [data-bs-theme="dark"] form.search-bar input {
+    background: #0f172a;
     color: var(--rj-text);
   }
-  .search-bar .btn {
-    height: 44px;
-    font-size: 0.95rem;
+  form.search-bar .btn-primary {
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
   }
 
-  /* Filter trigger: make more prominent (app action) */
-  .btn-outline-secondary.d-lg-none {
+  /* Filters trigger button (now d-md-none) */
+  .btn-outline-primary.d-md-none {
+    min-height: 42px;
+    font-size: 0.9rem;
+    border-radius: 0.5rem;
     border-color: var(--rj-border);
     color: var(--rj-text);
     background: var(--rj-white);
-    min-height: 44px;
-    font-size: 0.9rem;
   }
-  [data-bs-theme="dark"] .btn-outline-secondary.d-lg-none {
+  [data-bs-theme="dark"] .btn-outline-primary.d-md-none {
     background: #1e293b;
+    border-color: #475569;
   }
 
-  /* General buttons: guaranteed thumb-friendly tap targets */
-  .btn {
-    min-height: 44px;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-  .btn-sm {
-    min-height: 40px;
-    font-size: 0.8rem;
-  }
-
-  /* Cards tighter on mobile for density without cramping */
-  .card-body {
-    padding: 0.875rem !important;
-  }
-  .card-header {
-    padding: 0.5rem 0.875rem !important;
-  }
-
-  /* Typography scale down for mobile headers */
-  h1.h4, .h4 {
-    font-size: 1.05rem;
-    margin-bottom: 0.5rem !important;
-  }
-  .text-muted.small {
-    font-size: 0.8rem;
-  }
-
-  /* Dashboard stat cards: more compact grid feel */
-  .stat-card {
-    padding: 0.5rem !important;
-  }
-  .stat-card .display-6 {
-    font-size: 1.25rem;
-  }
-
-  /* Form controls everywhere (apply, login, filters, etc.) */
+  /* Universal form inputs (search, filters, apply, login, review, post-job) */
   .form-control,
-  .form-select {
-    min-height: 44px;
+  .form-select,
+  textarea.form-control {
+    min-height: 46px;
+    border-radius: 0.5rem;
     border: 1px solid var(--rj-border);
-    background-color: var(--rj-white);
+    background: var(--rj-white);
+    font-size: 0.95rem;
   }
   [data-bs-theme="dark"] .form-control,
-  [data-bs-theme="dark"] .form-select {
-    background-color: #1e293b;
+  [data-bs-theme="dark"] .form-select,
+  [data-bs-theme="dark"] textarea.form-control {
+    background: #1e293b;
     color: var(--rj-text);
+    border-color: #475569;
   }
   .form-control:focus,
   .form-select:focus {
     border-color: var(--rj-primary);
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
   }
 
-  /* Reduce some vertical whitespace */
-  .my-4 {
-    margin-top: 0.75rem !important;
-    margin-bottom: 0.75rem !important;
+  /* Thumb-friendly buttons */
+  .btn {
+    min-height: 46px;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+    border-radius: 0.5rem;
   }
-  .mb-4 {
-    margin-bottom: 0.75rem !important;
-  }
-  .py-5 {
-    padding-top: 1.25rem !important;
-    padding-bottom: 1.25rem !important;
-  }
-  .py-4 {
-    padding-top: 0.75rem !important;
-    padding-bottom: 0.75rem !important;
-  }
-
-  /* Job cards: ensure no overflow, good tap */
-  .card {
-    margin-bottom: 0.5rem;
-  }
-
-  /* Tables (my apps, applicants): scrollable already, compact */
-  .table {
+  .btn-sm {
+    min-height: 38px;
     font-size: 0.85rem;
   }
 
-  /* Bottom tab nav — the key "looks like an app" element */
+  /* Job cards as tappable professional list cells (left accent rail) */
+  .card {
+    position: relative;
+    border: 1px solid var(--rj-border) !important;
+    border-radius: 0.625rem !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+    margin-bottom: 0.625rem !important;
+    background: var(--rj-white);
+    border-left: 4px solid var(--rj-primary) !important;
+  }
+  [data-bs-theme="dark"] .card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+  }
+  .card-body {
+    padding: 0.75rem 0.875rem !important;
+  }
+  .card h5,
+  .card .h5 {
+    font-size: 1.02rem;
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
+  }
+  .card .text-muted.small {
+    font-size: 0.8rem;
+  }
+
+  /* Flex inside cards (salary/time alignment) */
+  .card .d-flex.flex-column.flex-sm-row {
+    gap: 0.25rem;
+  }
+
+  /* Results count paragraph (above listings) */
+  .col-12.col-lg-9 > p.text-muted.small.mb-3 {
+    font-size: 0.82rem;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Filter card (inside #jobFilters) */
+  #jobFilters .card {
+    border-left-width: 3px !important;
+  }
+
+  /* Tighter vertical rhythm + mobile header scale */
+  h1, .h1 { font-size: 1.35rem !important; }
+  h2, .h2 { font-size: 1.15rem !important; }
+  h4, .h4 { font-size: 1.0rem !important; margin-bottom: 0.375rem !important; }
+
+  .my-4 {
+    margin-top: 0.625rem !important;
+    margin-bottom: 0.625rem !important;
+  }
+  .mb-4 {
+    margin-bottom: 0.625rem !important;
+  }
+  .py-4 {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+  }
+  .py-5 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Dashboard widgets */
+  .stat-card {
+    padding: 0.625rem !important;
+  }
+  .stat-card .display-6 {
+    font-size: 1.35rem;
+  }
+
+  /* Tables (applicants, my apps, reviews) */
+  .table {
+    font-size: 0.82rem;
+  }
+  .table th,
+  .table td {
+    padding: 0.4rem 0.5rem !important;
+  }
+
+  /* Professional bottom tab navigation (the "app" signature) */
   .app-bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1030;
+    z-index: 1040;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: var(--rj-white);
+    background: var(--rj-white);
     border-top: 1px solid var(--rj-border);
-    height: 56px;
+    height: 58px;
     padding-bottom: env(safe-area-inset-bottom, 0);
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.06);
-    font-size: 0.7rem;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+    font-size: 0.68rem;
+    font-weight: 500;
   }
   [data-bs-theme="dark"] .app-bottom-nav {
-    background-color: #1e293b;
+    background: #1e293b;
     border-top-color: #334155;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
   }
   .app-bottom-nav a {
     flex: 1 1 0;
@@ -338,26 +396,37 @@ footer {
     justify-content: center;
     color: var(--rj-muted);
     text-decoration: none;
-    min-height: 48px; /* WCAG touch target */
-    padding: 2px 4px;
-    border-radius: 4px;
+    min-height: 48px;
+    padding: 4px 2px 2px;
+    border-radius: 6px;
   }
   .app-bottom-nav a.active {
     color: var(--rj-primary);
-    font-weight: 600;
+    font-weight: 700;
+    background: rgba(29, 78, 216, 0.08);
+  }
+  [data-bs-theme="dark"] .app-bottom-nav a.active {
+    background: rgba(29, 78, 216, 0.15);
   }
   .app-bottom-nav a i {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     line-height: 1;
     margin-bottom: 1px;
   }
   .app-bottom-nav span {
     line-height: 1;
     margin-top: 1px;
+    letter-spacing: 0.2px;
   }
 
-  /* Hide some decorative on very small if needed; keep professional */
+  /* Small labels */
   .divider-label {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
+    opacity: 0.85;
   }
-}
+
+  /* Guard against overflow */
+  .card,
+  .table-responsive {
+    max-width: 100%;
+    overflow-x: hidden;

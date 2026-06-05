@@ -46,8 +46,8 @@
 
   {% include 'partials/_bottom_nav.html' %}
 
-  {# Footer hidden on mobile (xs/sm) to avoid overlapping bottom tab nav; shown on desktop #}
-  <div class="d-none d-lg-block">
+  {# Footer hidden on mobile/tablet (when bottom nav is active) to avoid overlapping bottom tab nav; shown on desktop #}
+  <div class="d-none d-md-block">
     {% include 'partials/_footer.html' %}
   </div>
 
